@@ -8,24 +8,31 @@
 /* Latar Belakang Utama Aplikasi */
 body {
     background-image: url('banner.jpg');
-    background-size: 100% auto; /* Gambar melebar penuh ke samping mengikuti ukuran HP */
+    background-size: 100% auto; 
     background-repeat: no-repeat;
     background-position: top center;
-    background-color: #f7f9fa; /* Warna dasar area bawah jika gambar sudah habis */
+    background-color: #f7f9fa; /* Latar belakang bawah otomatis putih/abu terang setelah gambar habis */
     color: #333;
 }
 
-/* Banner Kosong (Hanya untuk memberi ruang kosong di atas logo bulat) */
+/* Banner Kosong */
 .banner {
     position: relative;
-    height: 380px; /* Jarak kosong agar logo bulat turun tepat di area tengah gambar kayu */
-    background-image: none; /* Hapus background dari banner lama */
+    height: 380px; 
+    background-image: none; 
+}
+
+/* KODE BARU: Pembatas untuk mendorong slogan & konten ke bawah gambar kayu */
+.pembatas-banner {
+    height: 180px; /* Jarak pas agar konten turun melewati batas piring paling bawah */
+    width: 100%;
+    display: block;
 }
 
 /* Kontainer Logo & Judul */
 .profile-container {
     position: absolute;
-    bottom: -60px; /* Menaruh logo bulat di bawah area piring agar tidak tabrakan */
+    bottom: -60px; 
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -46,16 +53,16 @@ body {
     margin-top: 15px;
     font-size: 1.5rem;
     font-weight: bold;
-    color: #ffffff; /* Warna putih agar kontras dengan kayu cokelat */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9); /* Bayangan hitam tebal agar tulisan sangat tajam */
+    color: #ffffff; 
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9); 
 }
 
 /* Slogan */
 .slogan {
     text-align: center;
-    margin-top: 80px; /* Jarak aman di bawah judul agar tidak menempel */
+    margin-top: 20px; 
     font-style: italic;
-    color: #4a4a4a; /* Warna dipertegas sedikit agar terbaca */
+    color: #2c3e50; /* Diubah ke warna gelap agar terbaca jelas di latar putih */
     font-size: 1.05rem;
     font-weight: 600;
 }
