@@ -19,7 +19,7 @@
         .preview-img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; display: none; margin-top: 10px; border: 1px dashed #ccc; }
     </style>
 
-    <!-- Memanggil Firebase SDK Versi Ambil Mudah (Compat) -->
+    <!-- Menggunakan Firebase v8 SDK yang jauh lebih bersahabat dan anti-crash di web statis -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
 </head>
@@ -64,18 +64,18 @@
     </div>
 
     <script>
-        // ⚠️ GANTI DENGAN DATA FIREBASE ASLI MILIKMU
+        // Konfigurasi resmi proyek Warung Barokah Madiun dengan databaseURL terpasang
         const firebaseConfig = {
-    apiKey: "AIzaSyAtGr7IooU8wgYYL8yUxTvzlwoo8hULAtM",
-    authDomain: "://firebaseapp.com",
-    projectId: "warung-barokah-madiun",
-    storageBucket: "warung-barokah-madiun.firebasestorage.app",
-    messagingSenderId: "426247388838",
-    appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67",
-    databaseURL: "https://firebasedatabase.app" // ← TAMBAHKAN BARIS INI (Gunakan koma di baris atasnya)
-  };
+            apiKey: "AIzaSyAtGr7IooU8wgYYL8yUxTvzlwoo8hULAtM",
+            authDomain: "://firebaseapp.com",
+            projectId: "warung-barokah-madiun",
+            storageBucket: "warung-barokah-madiun.firebasestorage.app",
+            messagingSenderId: "426247388838",
+            appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67",
+            databaseURL: "https://firebasedatabase.app"
+        };
 
-        // Inisialisasi Firebase cara lama yang jauh lebih stabil di PWA
+        // Inisialisasi Firebase v8
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const menuRef = db.ref('menu');
@@ -84,7 +84,7 @@
         const base64Input = document.getElementById('menu-foto-base64');
         const imgPreview = document.getElementById('image-preview');
 
-        // Fungsi merubah Gambar Galeri ke teks Base64
+        // Mengubah foto galeri menjadi string teks base64
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -127,10 +127,10 @@
             }
             listContainer.innerHTML = listHTML;
         }, (error) => {
-            document.getElementById('admin-menu-list').innerHTML = `<p style="text-align:center; color:red;">Gagal koneksi Firebase! Periksa tab RULES database kamu.</p>`;
+            document.getElementById('admin-menu-list').innerHTML = `<p style="text-align:center; color:red;">Terjadi kesalahan: ${error.message}</p>`;
         });
 
-        // Fungsi Global Hapus Menu
+        // Fungsi Hapus Menu
         window.aksiHapus = function(id) {
             if(confirm('Apakah Anda yakin ingin menghapus menu ini?')) {
                 db.ref('menu/' + id).remove()
@@ -139,7 +139,7 @@
             }
         }
 
-        // Fungsi Global Edit Menu
+        // Fungsi Edit Menu
         window.aksiEdit = function(id, judul, harga, foto) {
             document.getElementById('menu-id').value = id;
             document.getElementById('menu-judul').value = judul;
@@ -154,7 +154,7 @@
             document.getElementById('btn-batal-edit').style.display = "block";
         }
 
-        // Batal Edit
+        // Fungsi Batal Edit
         document.getElementById('btn-batal-edit').addEventListener('click', resetFormAdmin);
 
         function resetFormAdmin() {
@@ -167,7 +167,7 @@
             document.getElementById('btn-batal-edit').style.display = "none";
         }
 
-        // Aksi Kirim Form (Simpan / Perbarui)
+        // Aksi Submit Form (Simpan / Update)
         document.getElementById('menu-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -182,14 +182,14 @@
             }
 
             if (menuId) {
-                // Proses update
+                // Jalankan Proses update
                 db.ref('menu/' + menuId).update({ foto, judul, harga })
                 .then(() => {
                     alert('Menu berhasil diperbarui!');
                     resetFormAdmin();
                 }).catch(err => alert('Gagal update: ' + err.message));
             } else {
-                // Proses tambah baru
+                // Jalankan Proses tambah baru
                 menuRef.push({ foto, judul, harga })
                 .then(() => {
                     alert('Menu baru berhasil disimpan ke Firebase!');
