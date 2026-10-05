@@ -20,8 +20,8 @@
     </style>
 
     <!-- Menggunakan Firebase v8 SDK yang jauh lebih bersahabat dan anti-crash di web statis -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
 
@@ -66,14 +66,14 @@
     <script>
         // Konfigurasi resmi proyek Warung Barokah Madiun dengan databaseURL terpasang
         const firebaseConfig = {
-            apiKey: "AIzaSyAtGr7IooU8wgYYL8yUxTvzlwoo8hULAtM",
-            authDomain: "://firebaseapp.com",
-            projectId: "warung-barokah-madiun",
-            storageBucket: "warung-barokah-madiun.firebasestorage.app",
-            messagingSenderId: "426247388838",
-            appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67",
-            databaseURL: "https://firebasedatabase.app"
-        };
+  apiKey: "AIzaSyAtGr7looU8wgYYL8yUxTvzlwoo8hULAtM",
+  authDomain: "warung-barokah-madiun.firebaseapp.com",
+  databaseURL: "https://warung-barokah-madiun-default-rtdb.firebaseio.com".
+  projectId: "warung-barokah-madiun",
+  storageBucket: "warung-barokah-madiun.firebasestorage.app",
+  messagingSenderId: "426247388838",
+  appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67"
+};
 
         // Inisialisasi Firebase v8
         firebase.initializeApp(firebaseConfig);
