@@ -13,19 +13,27 @@ body {
 /* Banner & Header */
 .banner {
     position: relative;
-    height: 200px;
-    background-image: url('https://unsplash.com');
+    height: 240px; /* Sedikit dinaikkan ukurannya agar gambar kayu lebih terlihat */
+    background-image: url('banner.jpg'); /* Diarahkan ke file gambar kayu kamu */
     background-size: cover;
     background-position: center;
 }
 
 .profile-container {
     position: absolute;
-    bottom: -60px;
+    bottom: -20px; /* Mengangkat posisi logo dan teks agar menyatu di dalam banner */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     width: 100%;
+}
+
+.title {
+    margin-top: 10px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #ffffff; /* Mengubah warna teks menjadi PUTIH agar kontras dengan kayu cokelat */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Memberikan bayangan hitam agar teks sangat jelas dibaca */
 }
 
 .logo-bulat {
@@ -35,14 +43,6 @@ body {
     border: 4px solid #fff;
     object-fit: cover;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.title {
-    margin-top: 10px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #2c3e50;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
 }
 
 /* Slogan */
