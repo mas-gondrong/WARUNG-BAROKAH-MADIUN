@@ -1,0 +1,21 @@
+{
+  "name": "Warung Barokah Madiun",
+  "short_name": "Warung Barokah",
+  "description": "Aplikasi Menu Warung Barokah Madiun",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#25D366",
+  "icons": [
+    {
+      "src": "https://unsplash.com",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://unsplash.com",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
