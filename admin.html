@@ -6,7 +6,6 @@
     <title>Admin Panel - Warung Barokah</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Tambahan style khusus panel manajemen admin agar rapi */
         .admin-list-container { max-width: 500px; margin: 20px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .admin-item { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; gap: 10px; }
         .admin-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
@@ -19,6 +18,10 @@
         .btn-delete { background-color: #e74c3c; }
         .preview-img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; display: none; margin-top: 10px; border: 1px dashed #ccc; }
     </style>
+
+    <!-- Memanggil Firebase SDK Versi Ambil Mudah (Compat) -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 </head>
 <body>
 
@@ -26,12 +29,10 @@
         <h2 id="form-title">Tambah Menu Baru</h2>
         
         <form id="menu-form">
-            <!-- ID Tersembunyi untuk proses Edit data -->
             <input type="hidden" id="menu-id">
             
             <div class="form-group">
                 <label>Pilih Foto Makanan (dari Galeri)</label>
-                <!-- Mengubah input text menjadi file upload khusus gambar -->
                 <input type="file" id="menu-foto-file" accept="image/*">
                 <input type="hidden" id="menu-foto-base64">
                 <img id="image-preview" class="preview-img" alt="Pratinjau Gambar">
@@ -55,7 +56,6 @@
         </a>
     </div>
 
-    <!-- Bagian List Kelola Menu (Hapus & Edit) -->
     <div class="admin-list-container">
         <h3>Kelola Daftar Menu</h3>
         <div id="admin-menu-list" style="margin-top: 15px;">
@@ -63,11 +63,8 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getDatabase, ref, push, onValue, remove, update } from "https://gstatic.com";
-
+    <script>
+        // ⚠️ GANTI DENGAN DATA FIREBASE ASLI MILIKMU
         const firebaseConfig = {
   apiKey: "AIzaSyAtGr7looU8wgYYL8yUxTvzlwoo8hULAtM",
   authDomain: "warung-barokah-madiun.firebaseapp.com",
@@ -77,15 +74,16 @@
   appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67"
 };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const menuRef = ref(db, 'menu');
+        // Inisialisasi Firebase cara lama yang jauh lebih stabil di PWA
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const menuRef = db.ref('menu');
 
         const fileInput = document.getElementById('menu-foto-file');
         const base64Input = document.getElementById('menu-foto-base64');
         const imgPreview = document.getElementById('image-preview');
 
-        // Fungsi mengubah file gambar ke format Base64 (Teks Gambar)
+        // Fungsi merubah Gambar Galeri ke teks Base64
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -99,8 +97,8 @@
             }
         });
 
-        // Tampilkan daftar menu secara real-time di bawah form admin beserta tombol aksi
-        onValue(menuRef, (snapshot) => {
+        // Menampilkan data menu secara otomatis & Real-time
+        menuRef.on('value', (snapshot) => {
             const listContainer = document.getElementById('admin-menu-list');
             const data = snapshot.val();
             
@@ -120,51 +118,42 @@
                             <div class="admin-item-price">Rp ${parseInt(item.harga).toLocaleString('id-ID')}</div>
                         </div>
                         <div class="admin-actions">
-                            <button class="btn-action btn-edit" data-id="${id}" data-judul="${item.judul}" data-harga="${item.harga}" data-foto="${item.foto}">Edit</button>
-                            <button class="btn-action btn-delete" data-id="${id}">Hapus</button>
+                            <button type="button" class="btn-action btn-edit" onclick="aksiEdit('${id}', '${item.judul}', '${item.harga}', '${item.foto}')">Edit</button>
+                            <button type="button" class="btn-action btn-delete" onclick="aksiHapus('${id}')">Hapus</button>
                         </div>
                     </div>
                 `;
             }
             listContainer.innerHTML = listHTML;
-
-            // Sambungkan fungsi klik ke tombol Hapus
-            document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    if(confirm('Apakah Anda yakin ingin menghapus menu ini?')) {
-                        remove(ref(db, 'menu/' + id))
-                        .then(() => alert('Menu berhasil dihapus!'));
-                    }
-                });
-            });
-
-            // Sambungkan fungsi klik ke tombol Edit
-            document.querySelectorAll('.btn-edit').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const judul = this.getAttribute('data-judul');
-                    const harga = this.getAttribute('data-harga');
-                    const foto = this.getAttribute('data-foto');
-
-                    // Isi form dengan data yang mau diedit
-                    document.getElementById('menu-id').value = id;
-                    document.getElementById('menu-judul').value = judul;
-                    document.getElementById('menu-harga').value = harga;
-                    base64Input.value = foto;
-                    
-                    imgPreview.src = foto;
-                    imgPreview.style.display = 'block';
-
-                    // Ubah UI Form ke mode Edit
-                    document.getElementById('form-title').innerText = "Edit Menu Makanan";
-                    document.getElementById('btn-submit-text').innerText = "Simpan Perubahan";
-                    document.getElementById('btn-batal-edit').style.display = "block";
-                });
-            });
+        }, (error) => {
+            document.getElementById('admin-menu-list').innerHTML = `<p style="text-align:center; color:red;">Gagal koneksi Firebase! Periksa tab RULES database kamu.</p>`;
         });
 
-        // Aksi Batal Edit
+        // Fungsi Global Hapus Menu
+        window.aksiHapus = function(id) {
+            if(confirm('Apakah Anda yakin ingin menghapus menu ini?')) {
+                db.ref('menu/' + id).remove()
+                .then(() => alert('Menu berhasil dihapus!'))
+                .catch(err => alert('Gagal hapus: ' + err.message));
+            }
+        }
+
+        // Fungsi Global Edit Menu
+        window.aksiEdit = function(id, judul, harga, foto) {
+            document.getElementById('menu-id').value = id;
+            document.getElementById('menu-judul').value = judul;
+            document.getElementById('menu-harga').value = harga;
+            base64Input.value = foto;
+            
+            imgPreview.src = foto;
+            imgPreview.style.display = 'block';
+
+            document.getElementById('form-title').innerText = "Edit Menu Makanan";
+            document.getElementById('btn-submit-text').innerText = "Simpan Perubahan";
+            document.getElementById('btn-batal-edit').style.display = "block";
+        }
+
+        // Batal Edit
         document.getElementById('btn-batal-edit').addEventListener('click', resetFormAdmin);
 
         function resetFormAdmin() {
@@ -177,7 +166,7 @@
             document.getElementById('btn-batal-edit').style.display = "none";
         }
 
-        // Jalankan Aksi Simpan / Update saat form di-submit
+        // Aksi Kirim Form (Simpan / Perbarui)
         document.getElementById('menu-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -192,20 +181,19 @@
             }
 
             if (menuId) {
-                // Jalankan MODE EDIT (UPDATE DATA)
-                const updateRef = ref(db, 'menu/' + menuId);
-                update(updateRef, { foto, judul, harga })
+                // Proses update
+                db.ref('menu/' + menuId).update({ foto, judul, harga })
                 .then(() => {
                     alert('Menu berhasil diperbarui!');
                     resetFormAdmin();
-                });
+                }).catch(err => alert('Gagal update: ' + err.message));
             } else {
-                // Jalankan MODE TAMBAH BARU (PUSH DATA)
-                push(menuRef, { foto, judul, harga })
+                // Proses tambah baru
+                menuRef.push({ foto, judul, harga })
                 .then(() => {
                     alert('Menu baru berhasil disimpan ke Firebase!');
                     resetFormAdmin();
-                });
+                }).catch(err => alert('Gagal menyimpan: ' + err.message));
             }
         });
     </script>
