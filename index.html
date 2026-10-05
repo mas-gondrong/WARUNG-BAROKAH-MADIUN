@@ -46,25 +46,24 @@
     </div>
 
         <!-- Firebase SDK (Modular v10) untuk Halaman Utama -->
-    <script type="module">
-        // Registrasi Service Worker untuk PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
+<script type="module">
+    // Registrasi Service Worker untuk PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+    }
 
-        import { initializeApp } from "https://gstatic.com";
-        import { getDatabase, ref, onValue } from "https://gstatic.com";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        // Konfigurasi Firebase (Harus sama persis dengan di admin.html)
-        const firebaseConfig = {
-  apiKey: "AIzaSyAtGr7looU8wgYYL8yUxTvzlwoo8hULAtM",
-  authDomain: "warung-barokah-madiun.firebaseapp.com",
-  databaseURL: "https://warung-barokah-madiun-default-rtdb.firebaseio.com".
-  projectId: "warung-barokah-madiun",
-  storageBucket: "warung-barokah-madiun.firebasestorage.app",
-  messagingSenderId: "426247388838",
-  appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67"
-};
+    const firebaseConfig = {
+        apiKey: "AIzaSyAtGr7IooU8wgYYL8yUxTvzlwoo8hULAtM",
+        authDomain: "warung-barokah-madiun.firebaseapp.com",
+        databaseURL: "https://warung-barokah-madiun-default-rtdb.firebaseio.com",
+        projectId: "warung-barokah-madiun",
+        storageBucket: "warung-barokah-madiun.firebasestorage.app",
+        messagingSenderId: "426247388838",
+        appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67"
+    };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
