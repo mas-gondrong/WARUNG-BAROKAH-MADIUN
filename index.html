@@ -46,7 +46,7 @@
     </div>
 
         <!-- Firebase SDK (Modular v10) untuk Halaman Utama -->
-<script type="module">
+      <script type="module">
     // Registrasi Service Worker untuk PWA
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js');
@@ -54,6 +54,8 @@
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    alert('1. Import berhasil!');
 
     const firebaseConfig = {
         apiKey: "AIzaSyAtGr7IooU8wgYYL8yUxTvzlwoo8hULAtM",
@@ -65,37 +67,41 @@
         appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67"
     };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const menuRef = ref(db, 'menu');
+    alert('2. Config terbaca!');
 
-        // Membaca data secara Real-Time dari Firebase
-        onValue(menuRef, (snapshot) => {
-            const menuList = document.getElementById('menu-list');
-            const data = snapshot.val();
-            
-            if (!data) {
-                menuList.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#999;">Belum ada menu. Tambahkan lewat halaman admin.</p>';
-                return;
-            }
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const menuRef = ref(db, 'menu');
 
-            // Ubah objek Firebase menjadi Array HTML
-            let menuHTML = '';
-            for (let id in data) {
-                const item = data[id];
-                menuHTML += `
-                    <div class="menu-card">
-                        <img src="${item.foto}" alt="${item.judul}">
-                        <div class="menu-info">
-                            <div class="menu-title">${item.judul}</div>
-                            <div class="menu-price">Rp ${parseInt(item.harga).toLocaleString('id-ID')}</div>
-                        </div>
+    alert('3. Firebase siap!');
+
+    onValue(menuRef, (snapshot) => {
+        alert('4. Data diterima!');
+        const menuList = document.getElementById('menu-list');
+        const data = snapshot.val();
+        
+        if (!data) {
+            menuList.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#999;">Belum ada menu. Tambahkan lewat halaman admin.</p>';
+            return;
+        }
+
+        let menuHTML = '';
+        for (let id in data) {
+            const item = data[id];
+            menuHTML += `
+                <div class="menu-card">
+                    <img src="${item.foto}" alt="${item.judul}">
+                    <div class="menu-info">
+                        <div class="menu-title">${item.judul}</div>
+                        <div class="menu-price">Rp ${parseInt(item.harga).toLocaleString('id-ID')}</div>
                     </div>
-                `;
-            }
-            menuList.innerHTML = menuHTML;
-        });
-    </script>
- 
+                </div>
+            `;
+        }
+        menuList.innerHTML = menuHTML;
+    }, (error) => {
+        alert('ERROR: ' + error.message);
+    });
+      </script>
     </body>
 </html>
