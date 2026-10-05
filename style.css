@@ -5,66 +5,77 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.banner {
-    position: relative;
-}
-
+/* Banner */
+.banner { position: relative; }
 .banner-img {
     width: 100%;
-    display: block;      /* hilangkan celah misterius di bawah foto */
-    max-height: 75vh;    /* biar di laptop foto tidak menghabiskan satu layar penuh */
-    object-fit: cover;   /* foto tetap rapi meski terpotong sedikit */
-}
-
-.pembatas-banner {
-    height: 180px;   /* 60px untuk logo yang menjorok + 120px jarak napas */
-    width: 100%;
     display: block;
+    max-height: 75vh;
+    object-fit: cover;
 }
 
-/* KODE BARU: Pembatas untuk mendorong slogan & konten ke bawah gambar kayu */
-.pembatas-banner {
-    height: 180px; /* Jarak pas agar konten turun melewati batas piring paling bawah */
-    width: 100%;
-    display: block;
+/* ===== KARTU PROFIL WARUNG ===== */
+.warung-card {
+    max-width: 800px;
+    margin: 15px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Kontainer Logo & Judul */
-.profile-container {
-    position: absolute;
-    bottom: -60px; 
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: 100%;
-    padding: 0 15px;
+/* Logo kiri + judul di sebelahnya */
+.warung-head {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 5px;
+    border-bottom: 2px dashed #f0f0f0;
 }
 
 .logo-bulat {
-    width: 110px;
-    height: 110px;
+    width: 70px;      /* diperkecil dari 110px */
+    height: 70px;
     border-radius: 50%;
-    border: 4px solid #fff;
+    border: 3px solid #fff;
     object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    flex-shrink: 0;
 }
 
 .title {
-    margin-top: 15px;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    color: #ffffff; 
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9); 
+    color: #8B4513;   /* coklat tua, hangat khas warung */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
 }
 
-/* Slogan */
+/* Daftar menu teks, 2 kolom */
+.menu-teks h4 {
+    color: #2c3e50;
+    margin: 12px 0 6px 0;
+    font-size: 1rem;
+}
+.menu-teks ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 15px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Slogan di dasar kartu */
 .slogan {
     text-align: center;
-    margin-top: 20px; 
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #f0f0f0;
     font-style: italic;
-    color: #2c3e50; /* Diubah ke warna gelap agar terbaca jelas di latar putih */
-    font-size: 1.05rem;
     font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.05rem;
 }
 
 /* Menu Section */
