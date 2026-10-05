@@ -13,46 +13,47 @@ body {
 /* Banner & Header */
 .banner {
     position: relative;
-    height: 180px; /* Tinggi banner kayu yang pas untuk HP */
+    height: 420px; /* Diubah menjadi tinggi agar gambar kayu tampil potret */
     background-image: url('banner.jpg');
     background-size: cover;
     background-position: center;
-    margin-bottom: 90px; /* Memberikan ruang di bawah banner agar teks tidak menabrak slogan */
+    margin-bottom: 20px; /* Jarak aman ke elemen di bawah banner */
 }
 
 .profile-container {
     position: absolute;
-    bottom: -75px; /* Menurunkan logo bulat tepat di garis batas banner */
+    bottom: 30px; /* Mengangkat posisi logo dan teks agar pas di dalam banner kayu */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     width: 100%;
+    padding: 0 15px;
 }
 
 .logo-bulat {
-    width: 100px;
-    height: 100px;
+    width: 110px; /* Sedikit diperbesar agar proporsional dengan banner yang tinggi */
+    height: 110px;
     border-radius: 50%;
     border: 4px solid #fff;
     object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .title {
-    margin-top: 12px;
-    font-size: 1.4rem;
+    margin-top: 15px;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #2c3e50; /* Mengembalikan warna teks ke gelap agar sangat jelas dibaca di latar putih */
-    text-shadow: none; /* Menghapus bayangan agar terlihat bersih dan minimalis */
+    color: #ffffff; /* Warna putih kembali digunakan agar kontras di atas kayu cokelat */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9); /* Bayangan hitam dipertebal agar teks sangat jelas dibaca */
 }
 
 /* Slogan */
 .slogan {
     text-align: center;
-    margin-top: 20px; /* Jarak yang pas dari judul ke slogan */
+    margin-top: 25px;
     font-style: italic;
     color: #7f8c8d;
-    font-size: 1rem;
+    font-size: 1.05rem;
 }
 
 /* Menu Section */
