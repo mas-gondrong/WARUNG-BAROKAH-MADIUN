@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warung Barokah Madiun</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+    <!-- Bagian Atas: Banner & Logo Profil -->
+    <div class="banner">
+        <div class="profile-container">
+            <!-- Ganti URL gambar di bawah dengan foto logomu sendiri -->
+            <img src="https://unsplash.com" alt="Logo Warung" class="logo-bulat">
+            <h1 class="title">WARUNG BAROKAH MADIUN</h1>
+        </div>
+    </div>
+
+    <!-- Bagian Slogan -->
+    <p class="slogan">“Nikmat, Hangat, Mengenyangkan”</p>
+
+    <!-- Bagian Menu Utama -->
+    <div class="menu-container" id="menu-list">
+        <!-- Menu akan otomatis muncul di sini via JavaScript -->
+    </div>
+
+    <!-- Bagian Pemesanan & Lokasi -->
+    <div class="order-section">
+        <h3>Bagian Pemesanan</h3>
+        <!-- Ganti nomor WA & teks sesuai kebutuhan -->
+        <a href="https://wa.me" target="_blank" class="btn btn-wa">
+            💬 Hubungi WhatsApp
+        </a>
+        <!-- Ganti link Google Maps sesuai lokasi warungmu -->
+        <a href="https://google.com" target="_blank" class="btn btn-maps">
+            📍 Alamat Warung (Google Maps)
+        </a>
+    </div>
+
+    <script>
+        // Registrasi Service Worker untuk PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        // Fungsi Load Data Menu dari LocalStorage
+        function loadMenu() {
+            const menuList = document.getElementById('menu-list');
+            const savedMenu = JSON.parse(localStorage.getItem('warung_menu')) || [];
+            
+            if(savedMenu.length === 0) {
+                menuList.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#999;">Belum ada menu. Tambahkan lewat halaman admin.</p>';
+                return;
+            }
+
+            menuList.innerHTML = savedMenu.map(item => `
+                <div class="menu-card">
+                    <img src="${item.foto}" alt="${item.judul}">
+                    <div class="menu-info">
+                        <div class="menu-title">${item.judul}</div>
+                        <div class="menu-price">Rp ${parseInt(item.harga).toLocaleString('id-ID')}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Jalankan fungsi saat web dibuka
+        window.addEventListener('DOMContentLoaded', loadMenu);
+    </script>
+</body>
+</html>
