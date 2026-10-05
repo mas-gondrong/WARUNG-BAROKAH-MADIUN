@@ -9,8 +9,7 @@
 <body>
 
     <div class="admin-container">
-        <h2>Tambah Menu Baru</h2>
-        <p style="font-size:0.85rem; color:#7f8c8d; margin-bottom:20px;">Data disimpan langsung di browser ini.</p>
+        <h2>Tambah Menu Baru (Firebase)</h2>
         
         <form id="menu-form">
             <div class="form-group">
@@ -25,7 +24,7 @@
                 <label>Harga (Rupiah)</label>
                 <input type="number" id="menu-harga" placeholder="15000" required>
             </div>
-            <button type="submit" class="btn-submit">Simpan Menu</button>
+            <button type="submit" class="btn-submit">Simpan Menu ke Cloud</button>
         </form>
 
         <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
@@ -35,7 +34,26 @@
         </a>
     </div>
 
-    <script>
+    <!-- Firebase SDK (Modular v10) -->
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getDatabase, ref, push } from "https://gstatic.com";
+
+        // Konfigurasi Firebase kamu
+        const firebaseConfig = {
+  apiKey: "AIzaSyAtGr7looU8wgYYL8yUxTvzlwoo8hULAtM",
+  authDomain: "warung-barokah-madiun.firebaseapp.com",
+  projectId: "warung-barokah-madiun",
+  storageBucket: "warung-barokah-madiun.firebasestorage.app",
+  messagingSenderId: "426247388838",
+  appId: "1:426247388838:web:e8f1da4af0f09ccf2a7e67"
+};
+
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Aksi ketika tombol Simpan ditekan
         document.getElementById('menu-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -43,19 +61,22 @@
             const judul = document.getElementById('menu-judul').value;
             const harga = document.getElementById('menu-harga').value;
 
-            // Ambil data lama
-            const currentMenu = JSON.parse(localStorage.getItem('warung_menu')) || [];
+            // Referensi ke node 'menu' di Firebase
+            const menuRef = ref(db, 'menu');
 
-            // Tambah data baru
-            currentMenu.push({ foto, judul, harga });
-
-            // Simpan kembali ke LocalStorage
-            localStorage.setItem('warung_menu', JSON.stringify(currentMenu));
-
-            alert('Menu berhasil ditambahkan!');
-            
-            // Reset Form
-            document.getElementById('menu-form').reset();
+            // Kirim data ke Firebase
+            push(menuRef, {
+                foto: foto,
+                judul: judul,
+                harga: harga
+            })
+            .then(() => {
+                alert('Menu berhasil disimpan ke Firebase!');
+                document.getElementById('menu-form').reset();
+            })
+            .catch((error) => {
+                alert('Gagal menyimpan data: ' + error.message);
+            });
         });
     </script>
 </body>
