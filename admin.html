@@ -22,8 +22,24 @@
     <!-- Menggunakan Firebase v8 SDK yang jauh lebih bersahabat dan anti-crash di web statis -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body>
+    <!-- LAYAR LOGIN RAHASIA -->
+<div id="login-overlay">
+    <form id="login-form">
+        <h3>🔒 Admin Warung Barokah</h3>
+        <input type="email" id="login-email" placeholder="Email" autocomplete="email" required>
+        <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
+        <button type="submit">Masuk</button>
+        <p id="login-info" style="text-align:center; font-size:0.8rem; margin-top:10px; color:#999;">
+            Halaman khusus Admin
+        </p>
+    </form>
+</div>
+
+<!-- SEMUA KONTEN ADMIN (tersembunyi sampai login sukses) -->
+<div id="admin-content" style="display:none;">
 
     <div class="admin-container">
         <h2 id="form-title">Tambah Menu Baru</h2>
@@ -53,6 +69,9 @@
         
         <a href="index.html" style="display:block; text-align:center; color:#2c3e50; text-decoration:none; font-weight:600;">
             ← Kembali ke Halaman Utama
+            <button type="button" id="btn-logout" class="btn-submit" style="background-color:#e74c3c; margin-top:5px;">
+    🚪 Keluar (Logout)
+            </button>
         </a>
     </div>
 
@@ -62,6 +81,8 @@
             <p style="text-align: center; color: #999;">Memuat daftar menu...</p>
         </div>
     </div>
+
+</div>
 
     <script>
         // Konfigurasi resmi proyek Warung Barokah Madiun dengan databaseURL terpasang
@@ -79,6 +100,36 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const menuRef = db.ref('menu');
+
+        // ===== SISTEM LOGIN ADMIN =====
+        const auth = firebase.auth();
+
+       // Cek status login setiap kali halaman dibuka
+auth.onAuthStateChanged(function(user) {
+    if (user) {
+        // Sudah login → tampilkan konten admin
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('admin-content').style.display = 'block';
+    } else {
+        // Belum login → tampilkan layar login
+        document.getElementById('login-overlay').style.display = 'flex';
+        document.getElementById('admin-content').style.display = 'none';
+    }
+});
+
+// Aksi tombol Masuk
+document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-password').value;
+    auth.signInWithEmailAndPassword(email, pass)
+        .catch(function(err) { alert('Login gagal: ' + err.message); });
+});
+
+// Aksi tombol Logout
+document.getElementById('btn-logout').addEventListener('click', function() {
+    if (confirm('Keluar dari Admin?')) auth.signOut();
+});
 
         const fileInput = document.getElementById('menu-foto-file');
         const base64Input = document.getElementById('menu-foto-base64');
