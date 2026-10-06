@@ -104,7 +104,7 @@
     }
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getDatabase, ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAtGr7IooU8wgYYL8yUxTvzlwoo8hULAtM",
@@ -160,6 +160,26 @@ function buatInisial(nama) {
     return nama.trim().split(/\s+/).map(k => k[0]).join('').substring(0, 2).toUpperCase();
 }
 
+// Ubah angka waktu menjadi teks ramah
+function waktuRelatif(waktu) {
+    const selisih = Date.now() - waktu;
+    const detik = Math.floor(selisih / 1000);
+    const menit = Math.floor(detik / 60);
+    const jam = Math.floor(menit / 60);
+    const hari = Math.floor(jam / 24);
+    const minggu = Math.floor(hari / 7);
+    const bulan = Math.floor(hari / 30);
+    const tahun = Math.floor(hari / 365);
+
+    if (detik < 60) return 'Baru saja';
+    if (menit < 60) return menit + ' menit yang lalu';
+    if (jam < 24) return jam + ' jam yang lalu';
+    if (hari < 7) return hari + ' hari yang lalu';
+    if (minggu < 5) return minggu + ' minggu yang lalu';
+    if (bulan < 12) return bulan + ' bulan yang lalu';
+    return tahun + ' tahun yang lalu';
+}
+
 // --- Pemilih bintang (tap tap ala aplikasi) ---
 const picker = document.getElementById('t-bintang-picker');
 const bintangInput = document.getElementById('t-bintang');
@@ -203,7 +223,8 @@ document.getElementById('form-testimoni').addEventListener('submit', function(e)
     push(testimoniRef, {
         nama: nama,
         komentar: komentar,
-        bintang: nilaiBintang
+        bintang: nilaiBintang,
+        waktu: serverTimestamp()     // ← jam server Firebase dicatat
     })
     .then(() => {
         alert('Terima kasih atas testimoni Anda! 🙏');
@@ -219,10 +240,12 @@ document.getElementById('form-testimoni').addEventListener('submit', function(e)
     });
 });
 
-// --- Menampilkan semua testimoni (real-time) ---
-onValue(testimoniRef, (snapshot) => {
+// --- Menampilkan semua testimoni (real-time + waktu berjalan sendiri) ---
+let cacheTestimoni = null;
+
+function gambarTestimoni() {
     const slider = document.getElementById('testimoni-slider');
-    const data = snapshot.val();
+    const data = cacheTestimoni;
 
     if (!data) {
         slider.innerHTML = '<p class="testimoni-kosong">Belum ada testimoni. Jadilah yang pertama memberi kesan... 😉</p>';
@@ -233,9 +256,13 @@ onValue(testimoniRef, (snapshot) => {
     for (let id in data) {
         const t = data[id];
         const b = parseInt(t.bintang) || 0;
+        const waktuTeks = t.waktu ? `<span class="testimoni-waktu">${waktuRelatif(t.waktu)}</span>` : '';
         html += `
             <div class="testimoni-card">
-                <div class="testimoni-bintang">${'⭐'.repeat(b)}${'☆'.repeat(5 - b)}</div>
+                <div class="testimoni-bintang">
+                    <span>${'⭐'.repeat(b)}${'☆'.repeat(5 - b)}</span>
+                    ${waktuTeks}
+                </div>
                 <p class="testimoni-komentar">"${t.komentar}"</p>
                 <div class="testimoni-orang">
                     <div class="avatar" style="background-color:${warnaDariNama(t.nama)}">${buatInisial(t.nama)}</div>
@@ -245,7 +272,15 @@ onValue(testimoniRef, (snapshot) => {
         `;
     }
     slider.innerHTML = html;
+}
+
+onValue(testimoniRef, (snapshot) => {
+    cacheTestimoni = snapshot.val();
+    gambarTestimoni();
 });
+
+// Perbarui tiap 1 menit: "1 menit yang lalu" otomatis berubah jadi "2 menit" dst.
+setInterval(gambarTestimoni, 60000);
 
           // ===== TOMBOL RAHASIA: Ketuk logo 5x masuk Admin =====
 const logoRahasia = document.querySelector('.logo-bulat');
