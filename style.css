@@ -317,6 +317,21 @@
 .geser-hint { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
 @media (min-width: 600px) { .geser-hint { display: none; } }
 
+/* Baris bintang: kiri bintang, kanan waktu */
+.testimoni-bintang {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 2px;
+}
+.testimoni-waktu {
+    font-size: 0.72rem;
+    color: #999;
+    letter-spacing: 0;    /* tulisan tidak ikut renggang */
+    white-space: nowrap;
+}
+
 /* Layar Login Admin */
 #login-overlay {
     display: none;
