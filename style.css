@@ -163,6 +163,24 @@
 .btn-maps { background-color: #4285F4; }
 .btn-maps:hover { background-color: #357ae8; }
 
+/* Gambar WhatsApp sebagai tombol */
+.btn-wa-gambar {
+    display: block;
+    margin: 0 auto 12px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.15s;
+    max-width: 500px;
+}
+.btn-wa-gambar img {
+    width: 100%;
+    display: block;
+}
+.btn-wa-gambar:active {
+    transform: scale(0.97);   /* efek "ditekan" saat diklik */
+}
+
 /* Admin Panel Specific */
 .admin-container {
     max-width: 500px;
