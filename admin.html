@@ -82,6 +82,37 @@
         </div>
     </div>
 
+    <!-- ===== KELOLA TESTIMONI ===== -->
+<div class="admin-list-container">
+    <h3>Kelola Testimoni</h3>
+    <form id="testimoni-form">
+        <input type="hidden" id="testimoni-id">
+        <div class="form-group">
+            <label>Nama Pelanggan</label>
+            <input type="text" id="testimoni-nama" placeholder="Pak Slamet - Kuli Bangunan" required>
+        </div>
+        <div class="form-group">
+            <label>Komentar</label>
+            <textarea id="testimoni-komentar" rows="3" placeholder="Soto ayamnya juara, bumbunya nempel di hati!" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Bintang</label>
+            <select id="testimoni-bintang">
+                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                <option value="4">⭐⭐⭐⭐ (4)</option>
+                <option value="3">⭐⭐⭐ (3)</option>
+                <option value="2">⭐⭐ (2)</option>
+                <option value="1">⭐ (1)</option>
+            </select>
+        </div>
+        <button type="submit" id="btn-testimoni-submit" class="btn-submit">Simpan Testimoni</button>
+        <button type="button" id="btn-testimoni-batal" class="btn-submit" style="background-color:#7f8c8d; margin-top:5px; display:none;">Batal Edit</button>
+    </form>
+    <div id="admin-testimoni-list" style="margin-top: 15px;">
+        <p style="text-align:center; color:#999;">Memuat testimoni...</p>
+    </div>
+</div>
+
 </div>
 
     <script>
@@ -129,6 +160,90 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
 // Aksi tombol Logout
 document.getElementById('btn-logout').addEventListener('click', function() {
     if (confirm('Keluar dari Admin?')) auth.signOut();
+});
+
+        // ===== KELOLA TESTIMONI =====
+const testimoniRef = db.ref('testimoni');
+const formTestimoni = document.getElementById('testimoni-form');
+
+testimoniRef.on('value', (snapshot) => {
+    const list = document.getElementById('admin-testimoni-list');
+    const data = snapshot.val();
+
+    if (!data) {
+        list.innerHTML = '<p style="text-align:center; color:#999;">Belum ada testimoni. Tambahkan lewat form di atas.</p>';
+        return;
+    }
+
+    let html = '';
+    for (let id in data) {
+        const t = data[id];
+        const bintang = '⭐'.repeat(parseInt(t.bintang) || 0);
+        html += `
+            <div class="admin-item">
+                <div class="admin-item-info">
+                    <div class="admin-item-title">${t.nama}</div>
+                    <div style="font-size:0.8rem; color:#666;">${bintang}</div>
+                </div>
+                <div class="admin-actions">
+                    <button type="button" class="btn-action btn-edit" onclick="aksiEditTestimoni('${id}')">Edit</button>
+                    <button type="button" class="btn-action btn-delete" onclick="aksiHapusTestimoni('${id}')">Hapus</button>
+                </div>
+            </div>
+        `;
+    }
+    list.innerHTML = html;
+});
+
+function resetTestimoniForm() {
+    formTestimoni.reset();
+    document.getElementById('testimoni-id').value = '';
+    document.getElementById('btn-testimoni-submit').innerText = 'Simpan Testimoni';
+    document.getElementById('btn-testimoni-batal').style.display = 'none';
+}
+
+window.aksiHapusTestimoni = function(id) {
+    if (confirm('Hapus testimoni ini?')) {
+        db.ref('testimoni/' + id).remove()
+            .then(() => alert('Testimoni berhasil dihapus!'))
+            .catch(err => alert('Gagal hapus: ' + err.message));
+    }
+};
+
+window.aksiEditTestimoni = function(id) {
+    testimoniRef.child(id).once('value', (s) => {
+        const t = s.val();
+        document.getElementById('testimoni-id').value = id;
+        document.getElementById('testimoni-nama').value = t.nama;
+        document.getElementById('testimoni-komentar').value = t.komentar;
+        document.getElementById('testimoni-bintang').value = t.bintang;
+        document.getElementById('btn-testimoni-submit').innerText = 'Simpan Perubahan';
+        document.getElementById('btn-testimoni-batal').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+};
+
+document.getElementById('btn-testimoni-batal').addEventListener('click', resetTestimoniForm);
+
+formTestimoni.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('testimoni-id').value;
+    const data = {
+        nama: document.getElementById('testimoni-nama').value.trim(),
+        komentar: document.getElementById('testimoni-komentar').value.trim(),
+        bintang: document.getElementById('testimoni-bintang').value
+    };
+
+    if (id) {
+        db.ref('testimoni/' + id).update(data)
+            .then(() => { alert('Testimoni berhasil diperbarui!'); resetTestimoniForm(); })
+            .catch(err => alert('Gagal update: ' + err.message));
+    } else {
+        testimoniRef.push(data)
+            .then(() => { alert('Testimoni baru berhasil disimpan!'); resetTestimoniForm(); })
+            .catch(err => alert('Gagal menyimpan: ' + err.message));
+    }
 });
 
         const fileInput = document.getElementById('menu-foto-file');
