@@ -246,9 +246,11 @@ formTestimoni.addEventListener('submit', function(e) {
             bintang: data.bintang,
             waktu: firebase.database.ServerValue.TIMESTAMP   // versi v8
         })
+            
         .then(() => { alert('Testimoni baru berhasil disimpan!'); resetTestimoniForm(); })
         .catch(err => alert('Gagal menyimpan: ' + err.message));
     }
+    });
 
         const fileInput = document.getElementById('menu-foto-file');
         const base64Input = document.getElementById('menu-foto-base64');
@@ -368,7 +370,5 @@ formTestimoni.addEventListener('submit', function(e) {
             }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
 </body>
 </html>
