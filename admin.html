@@ -239,12 +239,16 @@ formTestimoni.addEventListener('submit', function(e) {
         db.ref('testimoni/' + id).update(data)
             .then(() => { alert('Testimoni berhasil diperbarui!'); resetTestimoniForm(); })
             .catch(err => alert('Gagal update: ' + err.message));
-    } else {
-        testimoniRef.push(data)
-            .then(() => { alert('Testimoni baru berhasil disimpan!'); resetTestimoniForm(); })
-            .catch(err => alert('Gagal menyimpan: ' + err.message));
+        } else {
+        testimoniRef.push({
+            nama: data.nama,
+            komentar: data.komentar,
+            bintang: data.bintang,
+            waktu: firebase.database.ServerValue.TIMESTAMP   // versi v8
+        })
+        .then(() => { alert('Testimoni baru berhasil disimpan!'); resetTestimoniForm(); })
+        .catch(err => alert('Gagal menyimpan: ' + err.message));
     }
-});
 
         const fileInput = document.getElementById('menu-foto-file');
         const base64Input = document.getElementById('menu-foto-base64');
