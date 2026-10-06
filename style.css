@@ -202,6 +202,45 @@
   font-weight: bold;
   }
 
+/* Layar Login Admin */
+#login-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+#login-form {
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+#login-form h3 { text-align: center; color: #2c3e50; }
+#login-form input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+#login-form button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #e67e22;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
    /* Container animasi kecil di pojok bawah */
   #masGondrongAnimation {
     position: fixed;
