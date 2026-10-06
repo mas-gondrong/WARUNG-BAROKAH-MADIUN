@@ -247,6 +247,76 @@
 }
 .btn-testimoni-kirim:disabled { background: #bdc3c7; }
 
+/* ===== KARTU TESTIMONI (baju pelanggan) ===== */
+.testimoni-section {
+    max-width: 800px;
+    margin: 30px auto 0;
+    text-align: center;
+}
+.testimoni-title { margin-bottom: 12px; font-size: 1.1rem; }
+
+/* Wadah geser kiri-kanan */
+.testimoni-slider {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;                  /* bisa digeser */
+    scroll-snap-type: x mandatory;     /* nempel rapi saat berhenti */
+    padding: 5px 15px 10px 15px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.testimoni-slider::-webkit-scrollbar { display: none; }
+
+/* Kartu testimoni putih */
+.testimoni-card {
+    flex: 0 0 85%;                    /* lebar 85% layar HP */
+    scroll-snap-align: center;
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+@media (min-width: 600px) {
+    .testimoni-card { flex-basis: 45%; }
+}
+
+/* Isi kartu */
+.testimoni-bintang { letter-spacing: 2px; }
+.testimoni-komentar {
+    flex-grow: 1;
+    font-style: italic;
+    color: #555;
+    margin: 10px 0 12px 0;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+.testimoni-orang {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Avatar bulat berinisial */
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.testimoni-nama { font-weight: 600; font-size: 0.9rem; color: #2c3e50; }
+.testimoni-kosong { color: #999; padding: 20px; }
+.geser-hint { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
+@media (min-width: 600px) { .geser-hint { display: none; } }
+
 /* Layar Login Admin */
 #login-overlay {
     display: none;
