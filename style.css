@@ -44,6 +44,15 @@
     flex-shrink: 0;
 }
 
+.logo-bulat {
+    /* ... style lama tetap ada di sini ... */
+    cursor: pointer;
+    touch-action: manipulation;      /* PENTING: cegah zoom saat ketuk cepat */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;      /* cegah menu "simpan gambar" di iPhone */
+}
+
 .title {
     font-size: 1.3rem;
     font-weight: bold;
