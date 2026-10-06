@@ -127,6 +127,38 @@
         alert('ERROR: ' + error.message);
     });
 
+          // ===== TOMBOL RAHASIA: Ketuk logo 5x masuk Admin =====
+const logoRahasia = document.querySelector('.logo-bulat');
+let hitunganKetukan = 0;
+let timerKetukan = null;
+
+logoRahasia.addEventListener('click', function() {
+    hitunganKetukan++;
+
+    // Getar singkat tiap ketukan (umpan balik rahasia)
+    if (navigator.vibrate) navigator.vibrate(40);
+
+    // Animasi logo mengecil sesaat
+    logoRahasia.animate(
+        [{ transform: 'scale(1)' }, { transform: 'scale(0.9)' }, { transform: 'scale(1)' }],
+        { duration: 150 }
+    );
+
+    // Reset hitungan kalau jeda lebih dari 2 detik
+    clearTimeout(timerKetukan);
+    timerKetukan = setTimeout(function() {
+        hitunganKetukan = 0;
+    }, 2000);
+
+    // KETUKAN KE-5: BUKA ADMIN PANEL!
+    if (hitunganKetukan >= 5) {
+        clearTimeout(timerKetukan);
+        hitunganKetukan = 0;
+        if (navigator.vibrate) navigator.vibrate([100, 50, 150]); // getar kemenangan
+        window.location.href = 'admin.html';
+    }
+});
+
           // --- Logo Mas Gondrong---
   const canvas = document.getElementById('fireCanvas');
   const ctx = canvas.getContext('2d');
