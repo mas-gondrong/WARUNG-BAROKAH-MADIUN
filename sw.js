@@ -1,4 +1,4 @@
-const CACHE_NAME = 'warung-barokah-v36';
+const CACHE_NAME = 'warung-barokah-v37';
 const ASSETS = [
   'index.html',
   'admin.html',
